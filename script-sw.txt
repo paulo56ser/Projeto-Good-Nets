@@ -1,0 +1,110 @@
+enable
+configure terminal
+hostname SW-GN
+banner motd "ATENÇAO APENAS O PESSOAL AUTORIZADO PARA ACESSAR!"
+username suporte privilege 15 secret goodnets
+enable secret SENHA
+line console 0
+password SENHA
+login local
+exit
+
+ip domain-name goodnets.local
+no ip domain-lookup
+crypto key generate rsa general-key modulus 1024
+line vty 0 15
+transport input ssh
+password SENHA
+login local
+exit
+
+
+service password-encryption
+
+vlan 10
+name GERENTES
+
+vlan 20
+name TI
+
+vlan 30
+name CELULA-DE-CONTRATO-5
+
+vlan 40
+name CELULA-DE-CONTRATO-4
+
+vlan 50
+name CELULA-DE-CONTRATO-3
+
+vlan 60
+name CELULA-DE-CONTRATO-1
+
+vlan 70
+name CELULA-DE-CONTRATO-2
+
+vlan 80
+name ADMINISTRATIVO
+
+vlan 90
+name COMERCIAL
+
+vlan 100
+name DIRETORES
+
+vlan 110
+name COMUNICACAO-E-MARKETING
+
+vlan 120
+name ETICA-E-AUDITORIA
+
+vlan 130
+name LEGAL
+
+vlan 140
+name CONTROLE-DE-QUALIDADE
+
+vlan 150
+name PROJETOS
+
+vlan 160
+name FINANCEIRO
+
+vlan 170
+name RH
+
+vlan 180
+name REDE-DO-CENARIO
+
+interface f0/1
+switchport mode trunk
+switchport trunk native  vlan 99
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,99
+no shutdown
+
+interface f0/2
+switchport mode trunk
+switchport trunk native  vlan 99
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,99
+no shutdown
+
+interface f0/23
+switchport mode trunk
+switchport trunk native  vlan 99
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,99
+no shutdown
+
+interface g0/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,99
+no shutdown
+
+interface range f0/3-22
+shutdown
+interface range f0/24
+shutdown
+interface g0/2
+shutdown
+
+end
+wr
