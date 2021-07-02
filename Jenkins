@@ -1,0 +1,31 @@
+pipeline{
+    agent any
+    stages {
+          stage('SCM Ckeckout'){
+              steps{
+                  checkout([
+                      $class: 'GitSCM', 
+                      branches: [[name: "*/main"]], 
+                      doGenerateSubmoduleConfigurations: false, 
+                      extensions: [], 
+                      submoduleCfg: [], 
+                      userRemoteConfigs: [[
+                          url: "https://github.com/spring-projects/spring-petclinic.git"
+                      ]]
+                  ])
+              }
+          }
+          stage('Build'){
+              steps{
+  				withMaven(
+                  globalMavenSettingsConfig: "mavenDefaultConfig", 
+                  jdk: 'openjdk9', 
+                  maven: 'maven3', 
+                  mavenLocalRepo: "/usr/share/maven/.m2",
+                  options:     [artifactsPublisher(disabled: true)]) {
+  					sh "mvn clean package"
+                  }
+              }
+          }
+      }
+  }
